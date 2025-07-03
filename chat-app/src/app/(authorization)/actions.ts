@@ -1,6 +1,7 @@
 "use server";
 
-import { ProfileState, AuthFormState } from "@/types/authTypes";
+import { AuthFormState } from "@/types/authTypes";
+import { FormState } from "@/types/forms";
 import { uploadImage } from "@/utils/supabase/files";
 import createClient from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -89,10 +90,10 @@ export async function Logout(prevState: AuthFormState, data: FormData) {
     else redirect('/auth');
 }
 
-export async function EditUserName(prevState: ProfileState, data: FormData) {
+export async function EditUserName(prevState: FormState, data: FormData) {
     const name = data.get('name') as string;
 
-    const newState: ProfileState = { errors: [] };
+    const newState: FormState = { errors: [] };
 
     if(name.length === 0) {
         newState.errors.push('Name is required');
@@ -127,11 +128,11 @@ export async function EditUserName(prevState: ProfileState, data: FormData) {
     return newState;
 }
 
-export async function EditUserPassword(prevState: ProfileState, data: FormData) {
+export async function EditUserPassword(prevState: FormState, data: FormData) {
     const password = data.get('password') as string;
     const confirmPassword = data.get('confirmPassword') as string;
 
-    const newState: ProfileState = { errors: [] };
+    const newState: FormState = { errors: [] };
 
     if(password.length === 0) {
         newState.errors.push('Password is required');
@@ -161,10 +162,10 @@ export async function EditUserPassword(prevState: ProfileState, data: FormData) 
     return newState;
 }
 
-export async function EditUserAvatar(prevState: ProfileState, data: FormData) {
+export async function EditUserAvatar(prevState: FormState, data: FormData) {
     const image = data.get('image') as File;
 
-    const newState: ProfileState = { errors: [] };
+    const newState: FormState = { errors: [] };
 
     if(!image) {
         newState.errors.push('No file selected');

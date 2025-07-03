@@ -2,11 +2,11 @@
 
 import ActionButton from "@/components/actionButton/actionButton";
 import { EditUserName } from "../../(authorization)/actions";
-import { ProfileState } from "@/types/authTypes";
 import { MouseEvent, useActionState, useEffect, useState } from "react";
 import { CheckIcon, EditIcon, XIcon } from "@/components/icons/icons";
+import { FormState } from "@/types/forms";
 
-const initialState: ProfileState = { errors: [] };
+const initialState: FormState = { errors: [] };
 
 export default function ProfileName({ name } : { name: string }) {
     const [state, formAction, pending] = useActionState(EditUserName, initialState);

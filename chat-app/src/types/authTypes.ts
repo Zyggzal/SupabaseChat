@@ -13,8 +13,3 @@ export type AuthFormState = {
         password?: string[]
     }
 }
-
-export type ProfileState = {
-    success?: boolean,
-    errors: string[]
-}

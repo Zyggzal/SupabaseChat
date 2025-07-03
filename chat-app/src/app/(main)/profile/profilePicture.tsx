@@ -3,12 +3,12 @@
 import { EditUserAvatar } from "@/app/(authorization)/actions";
 import { EditIcon, GearIcon } from "@/components/icons/icons";
 import UserAvatar from "@/components/userAvatar/userAvatar";
-import { ProfileState } from "@/types/authTypes";
+import { FormState } from "@/types/forms";
 import { ImageProps } from "next/image";
 import { MouseEvent, useActionState, useEffect, useRef } from "react";
 
 type PfpfProps = Omit<ImageProps, 'alt'>;
-const initialState: ProfileState = { errors: [] };
+const initialState: FormState = { errors: [] };
 
 export default function ProfilePicture(props : PfpfProps) {
     const [state, formAction, pending] = useActionState(EditUserAvatar, initialState);

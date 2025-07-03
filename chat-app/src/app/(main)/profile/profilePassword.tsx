@@ -2,12 +2,12 @@
 
 import ActionButton from "@/components/actionButton/actionButton";
 import { EditUserPassword } from "../../(authorization)/actions";
-import { ProfileState } from "@/types/authTypes";
 import { MouseEvent, useActionState, useEffect, useRef, useState } from "react";
 import { CheckIcon, EditIcon, XIcon } from "@/components/icons/icons";
 import PasswordToggle from "@/components/passwordToggle/passwordToggle";
+import { FormState } from "@/types/forms";
 
-const initialState: ProfileState = { errors: [] };
+const initialState: FormState = { errors: [] };
 
 export default function ProfilePassword() {
     const [state, formAction, pending] = useActionState(EditUserPassword, initialState);
