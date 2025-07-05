@@ -2,6 +2,7 @@ export type Chatroom = {
     id: number,
     role: 'creator'|'member'|'admin',
     name: string,
+    picture: string|undefined,
     created_at: Date
 } 
 

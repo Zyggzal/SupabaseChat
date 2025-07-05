@@ -2,7 +2,7 @@
 
 import { EditUserAvatar } from "@/app/(authorization)/actions";
 import { EditIcon, GearIcon } from "@/components/icons/icons";
-import UserAvatar from "@/components/userAvatar/userAvatar";
+import RoundedImage from "@/components/roundedImage/roundedImage";
 import { FormState } from "@/types/forms";
 import { ImageProps } from "next/image";
 import { MouseEvent, useActionState, useEffect, useRef } from "react";
@@ -30,7 +30,7 @@ export default function ProfilePicture(props : PfpfProps) {
 
     return <div className="flex flex-col items-center">
         <form ref={form} action={formAction} className="rounded-xl relative w-max h-max mb-5">
-            <UserAvatar alt="User profile pic" {...props}/>
+            <RoundedImage alt="User profile pic" {...props}/>
             <button disabled={pending} 
             className="absolute z-2 bg-opacity-90 w-full h-full top-0 flex items-center justify-center text-orange-400 opacity-0 hover:opacity-100 disabled:opacity-100 backdrop-blur-sm rounded-full transition-opacity duration-300"
             onClick={clickHandler}

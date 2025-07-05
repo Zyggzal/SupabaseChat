@@ -5,7 +5,7 @@ import { AuthFormState } from "@/types/authTypes";
 import Link from "next/link";
 import { useActionState, useContext, useEffect, useState } from "react";
 import ActionButton from "../actionButton/actionButton";
-import UserAvatar from "../userAvatar/userAvatar";
+import RoundedImage from "../roundedImage/roundedImage";
 import { ProfileContext, TProfileContext } from "@/contexts/profile";
 
 const initialState: AuthFormState = { errors: {} };
@@ -18,7 +18,7 @@ export default function Navbar() {
         { profile ? 
         <>
             <Link href={'/profile'} className="flex items-center gap-x-5 hover:text-orange-100">
-                <UserAvatar
+                <RoundedImage
                     className="w-20 h-20"
                     alt="navbar user profile picture"
                     src={profile.image_url}

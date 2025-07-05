@@ -1,6 +1,6 @@
 import Image, { ImageProps } from "next/image"
 
-export default function UserAvatar({ className, src, width, height, ...rest }: ImageProps) {
+export default function RoundedImage({ className, src, width, height, ...rest }: ImageProps) {
     return <Image
         priority
         src={src || '/images/no-pfp.jpg'}
