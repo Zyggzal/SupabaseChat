@@ -1,3 +1,5 @@
+import { UserProfile } from "./authTypes"
+
 export type Chatroom = {
     id: number,
     role: 'creator'|'member'|'admin',
@@ -10,4 +12,8 @@ export type ProfileChatroom = {
     profile_id: number,
     chatroom_id: number,
     role: 'creator'|'member'|'admin',
+}
+
+export type ChatroomMember = ProfileChatroom & {
+    profile: UserProfile,
 }

@@ -7,8 +7,7 @@ export default function ChatroomListItem({ chatroom } : { chatroom: Chatroom }) 
         href={`/chat/${chatroom.id}`}
         className="bg-gray-300 p-5 border-b-2 border-orange-400 hover:bg-gray-400 hover:border-b-5 flex items-center">
             <RoundedImage
-                width={100}
-                height={100}
+                className="w-25 h-25"
                 src={chatroom.picture || '/images/chat-no-pic.jpg'}
                 alt="chatroom picture"
                 />

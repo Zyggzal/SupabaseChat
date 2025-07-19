@@ -17,10 +17,9 @@ export default function ChatroomHeader() {
                     <RoundedImage
                         src={chatroom.picture || '/images/chat-no-pic.jpg'}
                         alt="chatroom header picture"
-                        width={100}
-                        height={100}
+                        className="w-25 h-25"
                         />
-                    <h1 className="ml-5 text-white font-bold text-xl">{chatroom.name}</h1>
+                    <h1 className="ml-5 text-white font-bold text-xl capitalize">{chatroom.name}</h1>
                 </div>
                 <button 
                     className="text-orange-400 hover:text-orange-300"

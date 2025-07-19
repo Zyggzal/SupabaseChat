@@ -5,7 +5,6 @@ import createClient from "@/utils/supabase/client";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { createContext, useEffect, useState } from "react";
 
-
 export type TProfileContext = {
     profile: UserProfile|undefined
 }

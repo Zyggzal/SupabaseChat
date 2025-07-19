@@ -71,7 +71,7 @@ export default function NewChatroomModal({
                         className="absolute hidden"
                         onChange={(e) => e.target.files && setPicture(URL.createObjectURL(e.target.files[0]))}/>
                 </div>
-                <label className="w-full p-5 flex justify-between items-center text-xl">
+                <label className="w-full p-5 py-10 flex justify-between items-center text-xl">
                     Name:
                     <input
                         name="name"

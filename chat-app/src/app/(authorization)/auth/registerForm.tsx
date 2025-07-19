@@ -1,7 +1,7 @@
 "use client";
 
 import ActionButton from "@/components/actionButton/actionButton";
-import { Register } from "../actions";
+import { register } from "../actions";
 import { AuthFormState } from "@/types/authTypes";
 import { useActionState, useEffect } from "react";
 
@@ -10,7 +10,7 @@ const initialState: AuthFormState = { errors: {} };
 export default function RegisterForm({ onEmailSent } : {
     onEmailSent: () => void
 }) {
-    const [state, formAction, pending] = useActionState(Register, initialState);
+    const [state, formAction, pending] = useActionState(register, initialState);
 
     useEffect(() => {
         if(state.success) {

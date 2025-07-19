@@ -1,6 +1,7 @@
 import createClient from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { EmailOtpType } from "@supabase/supabase-js";
+import { setProfileCookies } from "@/utils/cookies/server";
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
@@ -15,11 +16,14 @@ export async function GET(req: NextRequest) {
 
     if (token_hash && type) {
         const supabase = await createClient();
-        const { error } = await supabase.auth.verifyOtp({
+        const { data, error } = await supabase.auth.verifyOtp({
             type,
             token_hash,
         })
         if (!error) {
+            if(data.user) {
+                await setProfileCookies(data.user.id, supabase);
+            }
             redirectTo.searchParams.delete('next');
             return NextResponse.redirect(redirectTo);
         }

@@ -1,7 +1,5 @@
-import ChatList from "./chatList";
+import ChatListPage from "./chatlistPage";
 
-export default function ChatPage() {
-    return <div className="w-full h-full shadow-inner-lg">
-        <ChatList/>
-    </div>
+export default async function ChatPage() {
+    return <ChatListPage/>
 }

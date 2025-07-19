@@ -1,18 +1,18 @@
 "use client";
 
 import ActionButton from "@/components/actionButton/actionButton";
-
 import { MouseEvent, useActionState, useEffect, useState } from "react";
 import { CheckIcon, EditIcon, XIcon } from "@/components/icons/icons";
 import { FormState } from "@/types/forms";
-import { editUserName } from "./actions";
+import { editChatroomName } from "@/app/(main)/chat/actions";
+import { Chatroom } from "@/types/chat";
 
 const initialState: FormState = { errors: [] };
 
-export default function ProfileName({ name } : { name: string }) {
-    const [state, formAction, pending] = useActionState(editUserName, initialState);
+export default function ChatroomName({ chatroom } : { chatroom?: Chatroom }) {
+    const [state, formAction, pending] = useActionState(editChatroomName.bind(null, chatroom?.id), initialState);
     const [isEditing, setIsEditing] = useState(false);
-    const [value, setValue] = useState(name);
+    const [value, setValue] = useState(chatroom?.name);
 
     useEffect(() => {
         if(state.success) setIsEditing(false);
@@ -23,7 +23,7 @@ export default function ProfileName({ name } : { name: string }) {
         setIsEditing(prev => !prev);
     }
 
-    return <div className="flex h-max text-2xl w-full px-2">
+    return <div className="flex h-max text-2xl gap-x-4 px-2 text-white">
         {
             isEditing ? 
             <form action={formAction} className="grow">
@@ -42,7 +42,7 @@ export default function ProfileName({ name } : { name: string }) {
                 { state.errors && state.errors.map(err => <div className="text-red-500 text-sm" key={`${err}nameerror`}>{err}</div>)}
             </form>
             :
-            <div className="grow">{name}</div>
+            <div className="grow capitalize">{chatroom?.name}</div>
         }
         <button className="text-orange-600 hover:text-orange-400" onClick={changeState}>{ isEditing ? <XIcon/> : <EditIcon/>}</button>
     </div>

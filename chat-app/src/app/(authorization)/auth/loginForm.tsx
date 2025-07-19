@@ -1,14 +1,14 @@
 "use client";
 
 import { useActionState } from "react";
-import { Login } from "../actions";
+import { login } from "../actions";
 import { AuthFormState } from "@/types/authTypes";
 import ActionButton from "@/components/actionButton/actionButton";
 
 const initialState: AuthFormState = { errors: {} };
 
 export default function LoginForm() {
-    const [state, formAction, pending] = useActionState(Login, initialState);
+    const [state, formAction, pending] = useActionState(login, initialState);
 
     return <form action={formAction} className="bg-gray-300 flex flex-col justify-between gap-y-5 p-5 h-110 shadow-lg w-130">
         <div className="flex flex-col items-center gap-y-10">

@@ -1,16 +1,17 @@
 "use client";
 
 import ActionButton from "@/components/actionButton/actionButton";
-import { EditUserPassword } from "../../(authorization)/actions";
+
 import { MouseEvent, useActionState, useEffect, useRef, useState } from "react";
 import { CheckIcon, EditIcon, XIcon } from "@/components/icons/icons";
 import PasswordToggle from "@/components/passwordToggle/passwordToggle";
 import { FormState } from "@/types/forms";
+import { editUserPassword } from "./actions";
 
 const initialState: FormState = { errors: [] };
 
 export default function ProfilePassword() {
-    const [state, formAction, pending] = useActionState(EditUserPassword, initialState);
+    const [state, formAction, pending] = useActionState(editUserPassword, initialState);
     const [isEditing, setIsEditing] = useState(false);
     const [currentPassword, setCurrentPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

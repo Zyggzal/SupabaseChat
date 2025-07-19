@@ -1,6 +1,6 @@
 "use client";
 
-import { Logout } from "@/app/(authorization)/actions";
+import { logout } from "@/app/(authorization)/actions";
 import { AuthFormState } from "@/types/authTypes";
 import Link from "next/link";
 import { useActionState, useContext, useEffect, useState } from "react";
@@ -12,9 +12,9 @@ const initialState: AuthFormState = { errors: {} };
 
 export default function Navbar() {
     const { profile } = useContext(ProfileContext) as TProfileContext;
-    const [ state, action, pending ] = useActionState(Logout, initialState);
+    const [ state, action, pending ] = useActionState(logout, initialState);
 
-    return <div className="absolute top-0 left-0 w-full flex justify-between p-5 items-center z-1 bg-gray-400 shadow-lg">
+    return <div className="absolute top-0 left-0 w-full h-30 flex justify-between p-5 items-center z-1 bg-gray-400 shadow-lg">
         { profile ? 
         <>
             <Link href={'/profile'} className="flex items-center gap-x-5 hover:text-orange-100">
@@ -27,6 +27,8 @@ export default function Navbar() {
                     <p className="font-bold text-lg text-orange-500">{profile.name}</p>
                 </div>
             </Link>
+            <Link href='/'>Home</Link>
+            <Link href='/chat'>Chat</Link>
 
             <form action={action} className="w-50 flex flex-column gap-y-4 justify-end">
                 <ActionButton pending={pending}>Logout</ActionButton>

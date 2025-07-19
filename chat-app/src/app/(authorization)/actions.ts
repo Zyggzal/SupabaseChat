@@ -1,10 +1,8 @@
 "use server";
 
 import { AuthFormState } from "@/types/authTypes";
-import { FormState } from "@/types/forms";
-import { uploadImage } from "@/utils/supabase/files";
+import { clearProfileCookies, setProfileCookies } from "@/utils/cookies/server";
 import createClient from "@/utils/supabase/server";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 const validateFormData = (data: any, state: AuthFormState) => {
@@ -19,7 +17,7 @@ const validateFormData = (data: any, state: AuthFormState) => {
     }
 }
 
-export async function Login(prevState: AuthFormState, data: FormData) {
+export async function login(prevState: AuthFormState, data: FormData) {
     const email = data.get('email') as string;
     const password = data.get('password') as string;
 
@@ -33,7 +31,7 @@ export async function Login(prevState: AuthFormState, data: FormData) {
 
     const client = await createClient();
 
-    const { error } = await client.auth.signInWithPassword({
+    const { data: userData, error } = await client.auth.signInWithPassword({
         email, 
         password 
     });
@@ -43,11 +41,12 @@ export async function Login(prevState: AuthFormState, data: FormData) {
         return newState;
     }
     else {
+        await setProfileCookies(userData.user.id, client);
         redirect('/');
     }
 }
 
-export async function Register(prevState: AuthFormState, data: FormData) {
+export async function register(prevState: AuthFormState, data: FormData) {
     const email = data.get('email') as string;
     const password = data.get('password') as string;
 
@@ -76,7 +75,7 @@ export async function Register(prevState: AuthFormState, data: FormData) {
     return newState;
 }
 
-export async function Logout(prevState: AuthFormState, data: FormData) {
+export async function logout(prevState: AuthFormState, data: FormData) {
     const client = await createClient();
 
     const { error } = await client.auth.signOut();
@@ -87,117 +86,8 @@ export async function Logout(prevState: AuthFormState, data: FormData) {
     };
 
     if(error) return newState;
-    else redirect('/auth');
-}
-
-export async function EditUserName(prevState: FormState, data: FormData) {
-    const name = data.get('name') as string;
-
-    const newState: FormState = { errors: [] };
-
-    if(name.length === 0) {
-        newState.errors.push('Name is required');
-    }
-
-    if(newState.errors.length > 0) {
-        return newState;
-    }
-
-    const client = await createClient();
-
-    const { data: userData, error: userError } = await client.auth.getUser();
-
-    if(userError) {
-        newState.errors.push(userError.message);
-        return newState;
-    }
-
-    const { error } = await client
-    .from('profiles')
-    .update({ name })
-    .eq('user_id', userData.user.id);
-
-    if(error) {
-        newState.errors.push(error.message);
-    }
     else {
-        newState.success = true;
-        revalidatePath('/profile');
+        await clearProfileCookies();
+        redirect('/auth');
     }
-
-    return newState;
-}
-
-export async function EditUserPassword(prevState: FormState, data: FormData) {
-    const password = data.get('password') as string;
-    const confirmPassword = data.get('confirmPassword') as string;
-
-    const newState: FormState = { errors: [] };
-
-    if(password.length === 0) {
-        newState.errors.push('Password is required');
-    }
-
-    if(password.localeCompare(confirmPassword)) {
-        newState.errors.push('Passwords do not match');
-    }
-
-    if(newState.errors.length > 0) {
-        return newState;
-    }
-
-    const client = await createClient();
-
-    const { error } = await client.auth.updateUser({
-        password
-    });
-
-    if(error) {
-        newState.errors.push(error.message);
-    }
-    else {
-        newState.success = true;
-    }
-
-    return newState;
-}
-
-export async function EditUserAvatar(prevState: FormState, data: FormData) {
-    const image = data.get('image') as File;
-
-    const newState: FormState = { errors: [] };
-
-    if(!image) {
-        newState.errors.push('No file selected');
-        return newState;
-    }
-
-    const client = await createClient();
-
-    const { error: imgError, url } = await uploadImage(image, client);
-
-    if(imgError) {
-        newState.errors.push(imgError);
-        return newState;
-    }
-
-    const { error: userError, data: { user } } = await client.auth.getUser();
-
-    if(userError || !user) {
-        newState.errors.push(userError ? userError.message : 'User not found');
-        return newState;
-    }
-
-    const { error: profileError } = await client.from('profiles').update({ image_url: url }).eq('user_id', user.id);
-
-    if(profileError) {
-        newState.errors.push(profileError.message);
-        return newState;
-    }
-    else {
-        newState.success = true;
-        revalidatePath('/profile');
-    }
-
-    return newState;
 }

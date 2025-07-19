@@ -1,7 +1,5 @@
-import ChatList from "./chatList";
+import ChatListPage from "./chatlistPage";
 
-export default function ABOBA() {
-    return <div className="w-full h-full">
-        <ChatList/>
-    </div>
+export default function Default() {
+    return <ChatListPage/>
 }
