@@ -3,7 +3,8 @@
 import { UserProfile } from "@/types/authTypes";
 import createClient from "@/utils/supabase/client";
 import { RealtimeChannel } from "@supabase/supabase-js";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { PopupContext, TPopupContext } from "./popup";
 
 export type TProfileContext = {
     profile: UserProfile|undefined
@@ -14,6 +15,8 @@ export const ProfileContext = createContext<TProfileContext|null>(null)
 const ProfileProvider = ({ children } : { 
     children: React.ReactNode
 }) => {
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
+
     const [profile, setProfile] = useState<UserProfile>();
 
     useEffect(() => {
@@ -25,7 +28,9 @@ const ProfileProvider = ({ children } : {
             .select('*')
             .eq('user_id', userId);
 
-            if(profileError) console.log(profileError);
+            if(profileError) {
+                showPopup({ type: 'error', title: 'Error', timeout: 5000, children: 'Error getting profile info.'});
+            }
             else if(profileData) setProfile(profileData[0]);
         }
 
@@ -47,7 +52,10 @@ const ProfileProvider = ({ children } : {
         const initProfile = async () => {
             const { data: userData, error: userError } = await client.auth.getUser();
 
-            if(userError) console.log(userError);
+            if(userError) 
+            {
+                showPopup({ type: 'error', title: 'Error', timeout: 5000, children: 'Error getting user info.'});
+            }
             else if(userData.user) {
                 getProfile(userData.user.id);
                 subscribeToProfile(userData.user.id);

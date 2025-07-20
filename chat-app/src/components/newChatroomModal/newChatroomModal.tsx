@@ -8,6 +8,7 @@ import { addChatroom } from "@/app/(main)/chat/actions";
 import { FormState } from "../../types/forms";
 import ActionButton from "../actionButton/actionButton";
 import RoundedImage from "../roundedImage/roundedImage";
+import { PopupContext, TPopupContext } from "@/contexts/popup";
 
 const initialState: FormState = { errors: [] };
 
@@ -19,6 +20,7 @@ export default function NewChatroomModal({
     handleClose: () => void
 }) {
     const { profile } = useContext(ProfileContext) as TProfileContext;
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
 
     const [state, formAction, pending] = useActionState(addChatroom.bind(null, profile?.id), initialState);
 
@@ -41,9 +43,10 @@ export default function NewChatroomModal({
 
     useEffect(() => {
         if(state.success) {
+            showPopup({ type: 'info', title: 'Created', timeout: 5000, children: 'Created new chatroom.'});
             close();
         }
-    }, [state]);
+    }, [state.success]);
 
     return <Modal isOpen={isOpen} id="new-chatroom-modal">
         <div className="fixed top-0 left-0 w-screen h-screen z-40 backdrop-brightness-50 flex justify-center">

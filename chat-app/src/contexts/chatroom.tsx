@@ -3,9 +3,10 @@
 import { Chatroom, ChatroomMember, ProfileChatroom } from "@/types/chat";
 import createClient from "@/utils/supabase/client";
 import { RealtimeChannel } from "@supabase/supabase-js";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { chatroomFromData } from "@/utils/data/chatrooms";
 import { UserProfile } from "@/types/authTypes";
+import { PopupContext, TPopupContext } from "./popup";
 
 export type TChatroomContext = {
     chatroom: Chatroom|undefined,
@@ -19,6 +20,8 @@ const ChatroomProvider = ({ children, serverChatroom, serverMembers } : {
     serverChatroom?: Chatroom,
     serverMembers?: ChatroomMember[],
 }) => {
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
+
     const [chatroom, setChatroom] = useState<Chatroom|undefined>(serverChatroom);
     const [members, setMembers] = useState<ChatroomMember[]|undefined>(serverMembers);
 
@@ -34,6 +37,9 @@ const ChatroomProvider = ({ children, serverChatroom, serverMembers } : {
             let newMember:ChatroomMember = { ...status, profile: data };
 
             setMembers(prev => prev ? [...prev, newMember] : [newMember]);
+        }
+        else {
+            showPopup({ type: 'error', title: 'Error', timeout: 5000, children: 'Could not add member.'});
         }
     }
     
@@ -64,7 +70,6 @@ const ChatroomProvider = ({ children, serverChatroom, serverMembers } : {
     }
     
     const removeMember = (status: ProfileChatroom) => {
-        console.log(members)
         if(!members) return;
         setMembers(prev => prev?.filter(member => member.profile_id !== status.profile_id));
     }

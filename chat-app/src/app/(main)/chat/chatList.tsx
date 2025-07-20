@@ -116,7 +116,7 @@ export default function ChatList({ serverChatrooms } : { serverChatrooms? : Chat
         setChatrooms(serverChatrooms);
     }, [])
 
-    return <div className="flex flex-col relative h-full overflow-y-scroll">
+    return <div className="flex flex-col relative h-full overflow-y-scroll bg-gray-100"> 
         {
             chatrooms && chatrooms.map(room => <ChatroomListItem key={`${room.id}chatroomlistlink`} chatroom={room}/>)
         }

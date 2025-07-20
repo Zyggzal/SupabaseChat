@@ -14,7 +14,6 @@ export default async function Home() {
           <Link href={'/register'}>Sign up</Link>
         </div>
       }
-
     </div>
   );
 }

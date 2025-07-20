@@ -3,16 +3,19 @@
 import { editChatroomPicure } from "@/app/(main)/chat/actions";
 import { EditIcon, GearIcon } from "@/components/icons/icons";
 import RoundedImage from "@/components/roundedImage/roundedImage";
+import { PopupContext, TPopupContext } from "@/contexts/popup";
 import { Chatroom } from "@/types/chat";
 import { FormState } from "@/types/forms";
 import { ImageProps } from "next/image";
-import { MouseEvent, useActionState, useEffect, useRef } from "react";
+import { MouseEvent, useActionState, useContext, useEffect, useRef } from "react";
 
 type ChatroomPicProps = Omit<Omit<ImageProps, "alt">, "src"> & { chatroom?: Chatroom };
 
 const initialState: FormState = { errors: [] };
 
 export default function ChatroomPicture({ chatroom, ...props } : ChatroomPicProps) {
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
+
     const [state, formAction, pending] = useActionState(editChatroomPicure.bind(null, chatroom?.id), initialState);
     const input = useRef <HTMLInputElement>(null);
     const form = useRef<HTMLFormElement>(null);
@@ -24,6 +27,12 @@ export default function ChatroomPicture({ chatroom, ...props } : ChatroomPicProp
             }
         }
     }, [])
+
+    useEffect(() => {
+        if(state.success) {
+            showPopup({ type: 'info', title: 'Success', timeout: 5000, children: 'Chatroom picture changed successfully.'});
+        }
+    }, [state]);
 
     const clickHandler = (e: MouseEvent) => {
         e.preventDefault();

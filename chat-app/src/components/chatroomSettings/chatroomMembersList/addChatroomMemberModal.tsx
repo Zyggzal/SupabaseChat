@@ -2,11 +2,12 @@
 
 import { addChatroomMember } from "@/app/(main)/chat/actions";
 import ActionButton from "@/components/actionButton/actionButton";
-import { EditIcon, GearIcon, UserPlusIcon, XIcon } from "@/components/icons/icons";
+import { UserPlusIcon, XIcon } from "@/components/icons/icons";
 import Modal from "@/components/modal/modal";
+import { PopupContext, TPopupContext } from "@/contexts/popup";
 import { Chatroom } from "@/types/chat";
 import { FormState } from "@/types/forms";
-import { MouseEvent, useActionState, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useActionState, useContext, useEffect, useRef, useState } from "react";
 
 const initialState: FormState = { errors: [] };
 
@@ -15,12 +16,10 @@ export default function AddChatroomMemberModal({
 } : {
     chatroom?: Chatroom
 }) {
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
     const [state, formAction, pending] = useActionState(addChatroomMember.bind(null, chatroom?.id), initialState);
 
-    const [picture, setPicture] = useState<string>();
     const [isOpen, setIsOpen] = useState(false);
-
-    const input = useRef<HTMLInputElement>(null);
     const form = useRef<HTMLFormElement>(null);
 
     const close = () => {
@@ -30,9 +29,10 @@ export default function AddChatroomMemberModal({
 
     useEffect(() => {
         if(state.success) {
+            showPopup({ type: 'info', title: 'Invited', timeout: 5000, children: 'User invited to chatroom.'});
             close();
         }
-    }, [state]);
+    }, [state.success]);
 
     return <>
         <button className="bg-none text-orange-500 font-bold flex gap-x-5 hover:text-orange-400 mb-3" onClick={() => setIsOpen(true)}><UserPlusIcon/> Add new member</button>

@@ -9,20 +9,24 @@ import { quitChatroom } from "@/app/(main)/chat/actions";
 import ActionButton from "../../actionButton/actionButton";
 import { ExitDoorIcon } from "../../icons/icons";
 import { redirect } from "next/navigation";
+import { PopupContext, TPopupContext } from "@/contexts/popup";
 
 const initialState: FormState = { errors: [] };
 
 export default function ChatroomQuitButton({ chatroom } : { chatroom: Chatroom|undefined }) {
     const { profile } = useContext(ProfileContext) as TProfileContext;
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
+
     const [ state, action, pending ] = useActionState(quitChatroom.bind(null, chatroom?.id, profile?.id), initialState);
     const [isWarningOpen, setIsWarningOpen] = useState(false);
 
     useEffect(() => {
         setIsWarningOpen(false);
         if(state.success) {
+            showPopup({ type: 'info', title: 'Success', timeout: 5000, children: 'Left chatroom successfully.'});
             redirect('/chat');
         }
-    }, [state])
+    }, [state.success])
 
     return <>
         <button className="flex text-red-600 border-2 gap-x-2 border-red-600 rounded-md px-3 py-2 mt-5 hover:bg-red-600 hover:text-white" onClick={() => setIsWarningOpen(true)}><ExitDoorIcon/> Quit</button>

@@ -2,23 +2,29 @@
 
 import ActionButton from "@/components/actionButton/actionButton";
 
-import { MouseEvent, useActionState, useEffect, useRef, useState } from "react";
+import { MouseEvent, useActionState, useContext, useEffect, useRef, useState } from "react";
 import { CheckIcon, EditIcon, XIcon } from "@/components/icons/icons";
 import PasswordToggle from "@/components/passwordToggle/passwordToggle";
 import { FormState } from "@/types/forms";
 import { editUserPassword } from "./actions";
+import { PopupContext, TPopupContext } from "@/contexts/popup";
 
 const initialState: FormState = { errors: [] };
 
 export default function ProfilePassword() {
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
+
     const [state, formAction, pending] = useActionState(editUserPassword, initialState);
     const [isEditing, setIsEditing] = useState(false);
     const [currentPassword, setCurrentPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
     useEffect(() => {
-        if(state.success) setIsEditing(false);
-    }, [state]);
+        if(state.success) {
+            setIsEditing(false);
+            showPopup({ type: 'info', title: 'Success', timeout: 5000, children: 'Password changed successfully.'});
+        }
+    }, [state.success]);
 
     const changeState = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();

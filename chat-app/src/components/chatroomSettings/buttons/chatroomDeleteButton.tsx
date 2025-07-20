@@ -2,25 +2,29 @@
 
 import { Chatroom } from "@/types/chat";
 import { FormState } from "@/types/forms"
-import { startTransition, useActionState, useEffect, useState } from "react"
+import { startTransition, useActionState, useContext, useEffect, useState } from "react"
 import ActionButton from "../../actionButton/actionButton";
 import { TrashCanIcon } from "../../icons/icons";
 import { deleteChatroom } from "@/app/(main)/chat/actions";
 import Modal from "../../modal/modal";
 import { redirect } from "next/navigation";
+import { PopupContext, TPopupContext } from "@/contexts/popup";
 
 const initialState: FormState = { errors: [] };
 
 export default function ChatroomDeleteButton({ chatroom } : { chatroom?: Chatroom }) {
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
+
     const [ state, action, pending ] = useActionState(deleteChatroom.bind(null, chatroom?.id), initialState);
     const [isWarningOpen, setIsWarningOpen] = useState(false);
 
     useEffect(() => {
         setIsWarningOpen(false);
         if(state.success) {
+            showPopup({ type: 'info', title: 'Success', timeout: 5000, children: 'Chatroom deleted successfully.'});
             redirect('/chat');
         }
-    }, [state])
+    }, [state.success])
 
     return <>
         <button className="flex text-red-600 border-2 gap-x-2 border-red-600 rounded-md px-3 py-2 mt-5 hover:bg-red-600 hover:text-white" onClick={() => setIsWarningOpen(true)}><TrashCanIcon/> Delete</button>

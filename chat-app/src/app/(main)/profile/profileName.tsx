@@ -2,21 +2,27 @@
 
 import ActionButton from "@/components/actionButton/actionButton";
 
-import { MouseEvent, useActionState, useEffect, useState } from "react";
+import { MouseEvent, useActionState, useContext, useEffect, useState } from "react";
 import { CheckIcon, EditIcon, XIcon } from "@/components/icons/icons";
 import { FormState } from "@/types/forms";
 import { editUserName } from "./actions";
+import { PopupContext, TPopupContext } from "@/contexts/popup";
 
 const initialState: FormState = { errors: [] };
 
 export default function ProfileName({ name } : { name: string }) {
+    const { showPopup } = useContext(PopupContext) as TPopupContext;
+
     const [state, formAction, pending] = useActionState(editUserName, initialState);
     const [isEditing, setIsEditing] = useState(false);
     const [value, setValue] = useState(name);
 
     useEffect(() => {
-        if(state.success) setIsEditing(false);
-    }, [state]);
+        if(state.success) {
+            setIsEditing(false);
+            showPopup({ type: 'info', title: 'Success', timeout: 5000, children: 'Username changed successfully.' });
+        }
+    }, [state.success]);
 
     const changeState = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
