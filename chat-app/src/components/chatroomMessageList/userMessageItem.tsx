@@ -2,10 +2,11 @@
 
 import { Message } from "@/types/chat";
 import RoundedImage from "../roundedImage/roundedImage";
-import { HorisontalBarsIcon, PencilIcon } from "../icons/icons";
+import { HorisontalBarsIcon } from "../icons/icons";
 import { useState } from "react";
 import DeleteUserMessageButton from "./buttons/deleteUserMessageButton";
 import { dateToAgo } from "@/utils/data/dates";
+import EditUserMessageButton from "./buttons/editUserMessageButton";
 
 export default function UserMessageItem({ message }: { message: Message }) {
 
@@ -14,7 +15,7 @@ export default function UserMessageItem({ message }: { message: Message }) {
     return <div className="bg-orange-400 rounded-l-xl rounded-tr-xl text-white p-5 pb-1 relative shadow-gray-600 shadow-md max-w-200 self-end hover:bg-orange-500 relative">
         {
             isEditModalOpen && <div className="absolute -top-8 right-0 bg-orange-300 w-max p-2 px-4 flex items-center gap-x-3 rounded-xl">
-                <button className="rounded-full hover:text-orange-500"><PencilIcon size={20} /></button>
+                <EditUserMessageButton message={message} onClick={() => setIsEditModalOpen(false)}/>
                 <DeleteUserMessageButton messageId={message.id} onDelete={() => setIsEditModalOpen(false)}/>
             </div>
         }

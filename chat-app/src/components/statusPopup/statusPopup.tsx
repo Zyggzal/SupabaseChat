@@ -18,7 +18,7 @@ export default function StatusPopup({ children, type, onClose, title, timeout }:
         switch(type) {
             case 'error': return 'red-600'
             case 'warning': return 'yellow-500'
-            case 'info': return 'orange-500'
+            case 'info': return 'orange-400'
         }
     }
 
@@ -30,7 +30,7 @@ export default function StatusPopup({ children, type, onClose, title, timeout }:
         }
     }, [timeout]);
 
-    return <div className={`bg-gray-100 hover:bg-gray-200 relative p-2 border-t-4 p-1 rounded-l-md min-w-80 border-${getColor()}`}>
+    return <div className={`bg-gray-300 bg-opacity-50 hover:bg-gray-200 relative p-2 border-t-4 p-1 rounded-l-md min-w-80 border-${getColor()}`}>
         <div className={`flex justify-between w-full h-max border-b-3 p-1 rounded-l-md border-${getColor()}`}>
             { title && <h1 className={`mr-5 ml-2 font-bold text-${getColor()}`}>{title}</h1> }
             <button

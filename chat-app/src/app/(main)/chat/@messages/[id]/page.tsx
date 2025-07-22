@@ -33,6 +33,9 @@ export default async function MessagesPage({ params } : { params: Promise<{ id: 
         const chatroomData = chatroomFromResponse(chatroomResponse);
         if(chatroomData) {
             ({ messages, chatroom } = chatroomData);
+            messages = messages.sort((a, b) => {
+                return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+            });
 
             const { data: membersData, error: membersError } = await client.from('profiles_chatrooms').select('*, profile:profiles (*)').eq('chatroom_id', chatroom.id);
 

@@ -32,7 +32,10 @@ export default function AddChatroomMemberModal({
             showPopup({ type: 'info', title: 'Invited', timeout: 5000, children: 'User invited to chatroom.'});
             close();
         }
-    }, [state.success]);
+        if(state.errors) {
+            state.errors.map(error => showPopup({ type: 'error', title: 'Error', timeout: 5000, children: error})) 
+        }
+    }, [state]);
 
     return <>
         <button className="bg-none text-orange-500 font-bold flex gap-x-5 hover:text-orange-400 mb-3" onClick={() => setIsOpen(true)}><UserPlusIcon/> Add new member</button>

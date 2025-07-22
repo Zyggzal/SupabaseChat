@@ -1,14 +1,13 @@
 "use client";
 
 import { FormState } from "@/types/forms";
-import { PaperPlaneIcon } from "../icons/icons";
+import { PaperPlaneIcon, XIcon } from "../icons/icons";
 import { useActionState, useContext, useEffect, useRef, useState } from "react";
 import { editMessagesText, sendMessage } from "@/app/(main)/chat/actions";
 import { ChatroomContext, TChatroomContext } from "@/contexts/chatroom";
 import { ProfileContext, TProfileContext } from "@/contexts/profile";
 import { PopupContext, TPopupContext } from "@/contexts/popup";
 import { ChatroomMessagesContext, TChatroomMessagesContext } from "@/contexts/chatroomMessages";
-import { Message } from "@/types/chat";
 
 const initialState: FormState = { errors: [] };
 
@@ -45,7 +44,10 @@ function EditMessageInput() {
     const input = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if(messageToEdit && input.current) input.current.value = messageToEdit.text;
+        if(messageToEdit && input.current) {
+            input.current.value = messageToEdit.text;
+            input.current.select()
+        }
     }, [messageToEdit])
 
     useEffect(() => {
@@ -61,6 +63,12 @@ function EditMessageInput() {
         <input ref={input} disabled={pending} type="text" name="text" placeholder="Changed your mind...?" className="bg-gray-400 p-5 rounded-xl text-white font-bold flex-grow hover:bg-gray-500"/>
         <button disabled={pending} type="submit" className="text-white bg-orange-400 rounded-full w-15 h-15 flex items-center justify-center ml-5 hover:bg-orange-500">
             <PaperPlaneIcon size={25}/>
+        </button>
+        <button disabled={pending} onClick={(e) => {
+            e.preventDefault()
+            setMessageToEdit(null);
+        }} className="text-white bg-gray-400 rounded-full w-15 h-15 flex items-center justify-center ml-5 hover:bg-gray-500">
+            <XIcon size={25}/>
         </button>
     </form>
 }
