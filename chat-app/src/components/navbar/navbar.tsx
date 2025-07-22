@@ -14,7 +14,7 @@ export default function Navbar() {
     const { profile } = useContext(ProfileContext) as TProfileContext;
     const [ state, action, pending ] = useActionState(logout, initialState);
 
-    return <div className="absolute top-0 left-0 w-full h-30 flex justify-between p-5 items-center z-1 bg-gray-400 shadow-lg">
+    return <div className="absolute top-0 left-0 w-full h-30 flex justify-between p-5 items-center z-10 bg-gray-400 shadow-lg">
         { profile ? 
         <>
             <Link href={'/profile'} className="flex items-center gap-x-5 hover:text-orange-100">

@@ -12,11 +12,11 @@ export async function addChatroom(id: number|undefined, prevState: FormState, da
     const newState:FormState = { errors: [] };
 
     if(!id) {
-        newState.errors.push('Profile error');
+        newState.errors.push('Profile error.');
     }
 
     if(name.length === 0) {
-        newState.errors.push('No name specified');
+        newState.errors.push('No name specified.');
     }
 
     if(newState.errors.length > 0) {
@@ -51,14 +51,14 @@ export async function editChatroomPicure(id: number|undefined, prevState: FormSt
     const newState: FormState = { errors: [] };
 
     if(!id) {
-        newState.errors.push('Chatroom not found');
+        newState.errors.push('Chatroom not found.');
         return newState;
     }
 
     const picture = data.get('picture') as File;
 
     if(!picture) {
-        newState.errors.push('No file selected');
+        newState.errors.push('No file selected.');
         return newState;
     }
 
@@ -88,14 +88,14 @@ export async function editChatroomName(id:number|undefined, prevState: FormState
     const newState: FormState = { errors: [] };
     
     if(!id) {
-        newState.errors.push('Chatroom not found');
+        newState.errors.push('Chatroom not found.');
         return newState;
     }
 
     const name = data.get('name') as string;
 
     if(name.length === 0) {
-        newState.errors.push('Name is required');
+        newState.errors.push('Name is required.');
         return newState;
     }
 
@@ -121,7 +121,7 @@ export async function deleteChatroom(id: number|undefined, prevState: FormState)
     const newState: FormState = { errors: [] };
     
     if(!id) {
-        newState.errors.push('Chatroom not found');
+        newState.errors.push('Chatroom not found.');
         return newState;
     }
 
@@ -147,7 +147,7 @@ export async function quitChatroom(chatroom_id: number|undefined, profile_id: nu
     const newState: FormState = { errors: [] };
     
     if(!chatroom_id || !profile_id) {
-        newState.errors.push('Chatroom or profile not found');
+        newState.errors.push('Chatroom or profile not found.');
         return newState;
     }
 
@@ -176,11 +176,11 @@ export async function addChatroomMember(chatroom_id: number|undefined, prevState
     const newState: FormState = { errors: [] };
 
     if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-        newState.errors.push('Invalid email');
+        newState.errors.push('Invalid email.');
     }
     
     if(!chatroom_id) {
-        newState.errors.push('Chatroom not found');
+        newState.errors.push('Chatroom not found.');
     }
 
     if(newState.errors.length > 0) return newState;
@@ -198,7 +198,7 @@ export async function addChatroomMember(chatroom_id: number|undefined, prevState
         return newState;
     }
     if(!profileData) {
-        newState.errors.push('Error retrieving profile data');
+        newState.errors.push('Error retrieving profile data.');
         return newState;
     }
 
@@ -221,11 +221,11 @@ export async function changeChatroomMemberRole(chatroom_id: number|undefined, pr
     const newState: FormState = { errors: [] };
     
     if(!chatroom_id) {
-        newState.errors.push('Chatroom not found');
+        newState.errors.push('Chatroom not found.');
     }
 
     if(!profile_id) {
-        newState.errors.push('Profile not found');
+        newState.errors.push('Profile not found.');
     }
 
     if(newState.errors.length > 0) return newState;
@@ -253,11 +253,11 @@ export async function removeMemberFromChatroom(chatroom_id: number|undefined, pr
     const newState: FormState = { errors: [] };
     
     if(!chatroom_id) {
-        newState.errors.push('Chatroom not found');
+        newState.errors.push('Chatroom not found.');
     }
 
     if(!profile_id) {
-        newState.errors.push('Profile not found');
+        newState.errors.push('Profile not found.');
     }
 
     if(newState.errors.length > 0) return newState;
@@ -272,6 +272,102 @@ export async function removeMemberFromChatroom(chatroom_id: number|undefined, pr
 
     if(roleError) {
         newState.errors.push(roleError.message);
+        return newState;
+    }
+    else {
+        newState.success = true;
+    }
+
+    return newState;
+}
+
+export async function sendMessage(chatroom_id: number|undefined, created_by: number|undefined, prevState: FormState|undefined, data: FormData) {
+    const text = data.get('text') as string;
+    if(!text) return;
+
+    const newState: FormState = { errors: [] };
+    
+    if(!chatroom_id) {
+        newState.errors.push('Chatroom not found.');
+    }
+
+    if(!created_by) {
+        newState.errors.push('Profile not found.');
+    }
+
+    if(newState.errors.length > 0) return newState;
+
+    const client = await createClient();
+
+    const { error: messageError } = await client
+        .from('messages')
+        .insert({ 
+            chatroom_id,
+            text,
+            created_by
+        });
+
+    if(messageError) {
+        newState.errors.push(messageError.message);
+        return newState;
+    }
+    else {
+        newState.success = true;
+    }
+
+    return newState;
+}
+
+export async function deleteMessage(id: number|undefined, prevState: FormState) {
+    const newState: FormState = { errors: [] };
+    
+    if(!id) {
+        newState.errors.push('Message not found.');
+        return newState;
+    }
+
+    const client = await createClient();
+
+    const { error: chatroomError } = await client
+        .from('messages')
+        .delete()
+        .eq('id', id);
+
+    if(chatroomError) {
+        newState.errors.push('Could not delete message.');
+        return newState;
+    }
+    else {
+        newState.success = true;
+    }
+
+    return newState;
+}
+
+export async function editMessagesText(message_id: number|undefined, prevState: FormState, data: FormData) {
+    const text = data.get('text') as string; 
+    
+    const newState: FormState = { errors: [] };
+    
+    if(!text) {
+        newState.errors.push('Message can not be empty.');
+    }
+
+    if(!message_id) {
+        newState.errors.push('Message not found.');
+    }
+
+    if(newState.errors.length > 0) return newState;
+
+    const client = await createClient();
+
+    const { error: msgError } = await client
+        .from('messages')
+        .update({ text })
+        .eq('id', message_id);
+
+    if(msgError) {
+        newState.errors.push(msgError.message);
         return newState;
     }
     else {

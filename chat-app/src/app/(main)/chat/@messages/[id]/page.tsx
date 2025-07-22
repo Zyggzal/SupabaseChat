@@ -2,20 +2,25 @@ import ChatroomProvider from "@/contexts/chatroom";
 import ChatroomHeader from "./chatroomHeader";
 import { getProfileCookies } from "@/utils/cookies/server";
 import createClient from "@/utils/supabase/server";
-import { chatroomFromData } from "@/utils/data/chatrooms";
+import { chatroomFromResponse } from "@/utils/data/chatrooms";
 import { redirect } from "next/navigation";
+import ChatroomMessagesList from "@/components/chatroomMessageList/chatroomMessageList";
+import ChatroomMessageInput from "@/components/chatroomMessageInput/chatroomMessageInput";
+import ChatroomMembersProvider from "@/contexts/chatroomMembers";
+import ChatroomMessagesProvider from "@/contexts/chatroomMessages";
 
 export default async function MessagesPage({ params } : { params: Promise<{ id: number }> }) {
     let chatroom;
     let members;
+    let messages;
 
     const id = (await params).id;
     const profileId = await getProfileCookies();
 
     const client = await createClient();
 
-    const { data: chatroomData, error: chatroomError } = await client.from('profiles_chatrooms')
-    .select('*, chatrooms (*)')
+    const { data: chatroomResponse, error: chatroomError } = await client.from('profiles_chatrooms')
+    .select('*, chatrooms (*, messages (*, created_by:profiles (*)))')
     .eq('profile_id', profileId)
     .eq('chatroom_id', id)
     .single();
@@ -25,9 +30,10 @@ export default async function MessagesPage({ params } : { params: Promise<{ id: 
         redirect('/chat')
     }
     else {
-        chatroom = chatroomFromData(chatroomData);
+        const chatroomData = chatroomFromResponse(chatroomResponse);
+        if(chatroomData) {
+            ({ messages, chatroom } = chatroomData);
 
-        if(chatroom) {
             const { data: membersData, error: membersError } = await client.from('profiles_chatrooms').select('*, profile:profiles (*)').eq('chatroom_id', chatroom.id);
 
             if(membersError) console.log(membersError);
@@ -37,9 +43,15 @@ export default async function MessagesPage({ params } : { params: Promise<{ id: 
         }
     }
 
-    return <ChatroomProvider serverChatroom={chatroom} serverMembers={members}>
-        <div className="w-full h-full relative">
-            <ChatroomHeader/>
-        </div>
+    return <ChatroomProvider serverChatroom={chatroom}>
+        <ChatroomMembersProvider serverMembers={members}>
+            <ChatroomMessagesProvider serverMessages={messages}>
+                <div className="w-full h-full relative flex flex-col">
+                    <ChatroomHeader/>
+                    <ChatroomMessagesList/>
+                    <ChatroomMessageInput/>
+                </div>
+            </ChatroomMessagesProvider>
+        </ChatroomMembersProvider>
     </ChatroomProvider>
 }

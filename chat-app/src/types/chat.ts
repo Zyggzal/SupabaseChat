@@ -1,11 +1,19 @@
 import { UserProfile } from "./authTypes"
 
+export type Message = {
+    id: number,
+    text: string,
+    created_by: UserProfile,
+    created_at: Date,
+    isEdited: boolean
+}
+
 export type Chatroom = {
     id: number,
     role: 'creator'|'member'|'admin',
     name: string,
     picture: string|undefined,
-    created_at: Date
+    created_at: Date,
 } 
 
 export type ProfileChatroom = {

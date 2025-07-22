@@ -1,17 +1,17 @@
 "use client";
 
-import { Chatroom, ChatroomMember, ProfileChatroom } from "@/types/chat";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { Chatroom } from "@/types/chat";
+import { useContext, useMemo } from "react";
 import ChatroomMembersListItem from "./chatroomMembersListItem";
 import { ProfileContext, TProfileContext } from "@/contexts/profile";
 import AddChatroomMemberModal from "./addChatroomMemberModal";
-import { ChatroomContext, TChatroomContext } from "@/contexts/chatroom";
+import { ChatroomMembersContext, TChatroomMembersContext } from "@/contexts/chatroomMembers";
 
 type ChatroomMembersListProps = { chatroom?: Chatroom };
 
 export default function ChatroomMembersList({ chatroom } : ChatroomMembersListProps) {
     const { profile } = useContext(ProfileContext) as TProfileContext;
-    const { members } = useContext(ChatroomContext) as TChatroomContext;
+    const { members } = useContext(ChatroomMembersContext) as TChatroomMembersContext;
 
     const allMembers = useMemo(() => {
         if(!members) return;

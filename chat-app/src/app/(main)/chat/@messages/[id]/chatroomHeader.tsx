@@ -10,7 +10,7 @@ export default function ChatroomHeader() {
     const { chatroom } = useContext(ChatroomContext) as TChatroomContext;
     const [areSettingsOpen, setAreSettingsOpen] = useState(false);
 
-    return <div className="flex justify-between items-center bg-gray-400 shadow-xl absolute top-0 left-0 w-full height-max p-5 h-35">
+    return <div className="flex justify-between items-center bg-gray-400 shadow-sm absolute top-0 left-0 w-full height-max p-5 h-35 z-5">
         {
             chatroom && <>
                 <div className="flex items-center">
