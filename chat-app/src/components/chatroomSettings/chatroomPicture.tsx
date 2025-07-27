@@ -6,7 +6,7 @@ import RoundedImage from "@/components/roundedImage/roundedImage";
 import { PopupContext, TPopupContext } from "@/contexts/popup";
 import { Chatroom } from "@/types/chat";
 import { FormState } from "@/types/forms";
-import { ImageProps } from "next/image";
+import Image, { ImageProps } from "next/image";
 import { MouseEvent, useActionState, useContext, useEffect, useRef } from "react";
 
 type ChatroomPicProps = Omit<Omit<ImageProps, "alt">, "src"> & { chatroom?: Chatroom };
@@ -39,8 +39,8 @@ export default function ChatroomPicture({ chatroom, ...props } : ChatroomPicProp
         input.current?.click();
     }
 
-    return <div className="flex flex-col items-center">
-        <form ref={form} action={formAction} className="rounded-xl relative w-max h-max mb-5">
+    return <div className="flex flex-col items-center relative">
+        <form ref={form} action={formAction} className="rounded-xl relative w-max h-max mb-5 z-2">
             <RoundedImage 
                 alt="User profile pic" 
                 src={chatroom?.picture || '/images/chat-no-pic.jpg'} 

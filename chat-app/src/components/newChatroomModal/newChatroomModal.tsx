@@ -9,6 +9,7 @@ import { FormState } from "../../types/forms";
 import ActionButton from "../actionButton/actionButton";
 import RoundedImage from "../roundedImage/roundedImage";
 import { PopupContext, TPopupContext } from "@/contexts/popup";
+import Image from "next/image";
 
 const initialState: FormState = { errors: [] };
 
@@ -52,7 +53,11 @@ export default function NewChatroomModal({
         <div className="fixed top-0 left-0 w-screen h-screen z-40 backdrop-brightness-50 flex justify-center">
             <form ref={form} action={formAction} className="bg-gray-400 w-160 min-w-100 h-max text-white flex flex-col items-center mt-40 p-10 relative">
                 <button className="absolute top-5 right-5 hover:text-orange-400" onClick={close}><XIcon size={30}/></button>
-                <h1 className="text-orange-400 font-bold text-4xl mb-10">Add Chatroom</h1>
+                <Image src={'/images/graffiti/newChatroom.png'} 
+                    alt="new chatroom pic" 
+                    width={800} 
+                    height={600}
+                    className="w-100 h-65 absolute -top-30 -left-30 -rotate-15"/>
                 <div className="relative">
                     <RoundedImage 
                         className="w-30 h-30"

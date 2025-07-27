@@ -29,7 +29,7 @@ export default function ChatroomName({ chatroom } : { chatroom?: Chatroom }) {
         setIsEditing(prev => !prev);
     }
 
-    return <div className="flex h-max text-2xl gap-x-4 px-2 text-white">
+    return <div className="flex h-max text-2xl gap-x-4 px-2 text-white z-2">
         {
             isEditing ? 
             <form action={formAction} className="grow">

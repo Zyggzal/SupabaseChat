@@ -33,7 +33,7 @@ const PopupProvider = ({ children } : {
                         title={popup.title} 
                         onClose={() => closePopup(popup)} 
                         timeout={popup.timeout}
-                        key={`${popup.type}popup${popup.title}`}>
+                        key={`${new Date().getTime()}popup`}>
                         {popup.children}
                     </StatusPopup>)
                 }

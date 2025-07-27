@@ -1,10 +1,9 @@
 "use client";
 
-import { Chatroom, Message } from "@/types/chat";
+import { Message } from "@/types/chat";
 import createClient from "@/utils/supabase/client";
 import { RealtimeChannel } from "@supabase/supabase-js";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { chatroomFromData } from "@/utils/data/chatrooms";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ChatroomContext, TChatroomContext } from "./chatroom";
 
 export type TChatroomMessagesContext = {
@@ -68,7 +67,6 @@ const ChatroomMessagesProvider = ({ children, serverMessages } : {
                     filter: `chatroom_id=eq.${chatroom.id}`
                 },
                 (payload) => {
-                    console.log(payload.eventType)
                     switch(payload.eventType) {
                         case "DELETE":
                             removeMessage(payload.old as Message); break;

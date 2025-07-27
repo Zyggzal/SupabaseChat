@@ -7,6 +7,7 @@ import Modal from "@/components/modal/modal";
 import { PopupContext, TPopupContext } from "@/contexts/popup";
 import { Chatroom } from "@/types/chat";
 import { FormState } from "@/types/forms";
+import Image from "next/image";
 import { useActionState, useContext, useEffect, useRef, useState } from "react";
 
 const initialState: FormState = { errors: [] };
@@ -43,7 +44,8 @@ export default function AddChatroomMemberModal({
                 <div className="fixed top-0 left-0 w-screen h-screen z-40 backdrop-brightness-50 flex justify-center">
                     <form ref={form} action={formAction} className="bg-gray-400 w-160 min-w-100 h-max text-white flex flex-col items-center mt-40 p-10 relative">
                         <button className="absolute top-5 right-5 hover:text-orange-400" onClick={close}><XIcon size={30}/></button>
-                        <h1 className="text-orange-400 font-bold text-4xl mb-10">New Member?</h1>
+                        <Image src="/images/graffiti/newMember.png" className="w-100 h-50 absolute -top-30 -left-20 -rotate-10" alt="new member pic" width={1000} height={1000}/>
+                        <Image src="/images/graffiti/wtf.png" className="w-40 h-40 absolute -bottom-10 -right-10 rotate-30" alt="question marks pic" width={1000} height={1000}/>
                         <label className="w-full p-5 py-10 flex justify-between items-center text-xl">
                             Email:
                             <input

@@ -3,16 +3,28 @@
 import { logout } from "@/app/(authorization)/actions";
 import { AuthFormState } from "@/types/authTypes";
 import Link from "next/link";
-import { useActionState, useContext, useEffect, useState } from "react";
+import { useActionState, useContext } from "react";
 import ActionButton from "../actionButton/actionButton";
 import RoundedImage from "../roundedImage/roundedImage";
 import { ProfileContext, TProfileContext } from "@/contexts/profile";
+import { usePathname } from "next/navigation";
 
 const initialState: AuthFormState = { errors: {} };
+
+const linkClasses = {
+    active: 'font-bold text-orange-400',
+    passive: 'text-white'
+}
 
 export default function Navbar() {
     const { profile } = useContext(ProfileContext) as TProfileContext;
     const [ state, action, pending ] = useActionState(logout, initialState);
+
+    const pathname = usePathname();
+
+    const getLinkClass = (path: RegExp) => {
+        return path.test(pathname) ? linkClasses.active : linkClasses.passive;
+    }
 
     return <div className="absolute top-0 left-0 w-full h-30 flex justify-between p-5 items-center z-10 bg-gray-400 shadow-lg">
         { profile ? 
@@ -27,8 +39,8 @@ export default function Navbar() {
                     <p className="font-bold text-lg text-orange-500">{profile.name}</p>
                 </div>
             </Link>
-            <Link href='/'>Home</Link>
-            <Link href='/chat'>Chat</Link>
+            <Link className={getLinkClass(/\/$/)} href='/'>Home</Link>
+            <Link className={getLinkClass(/\/chat\/*/)} href='/chat'>Chat</Link>
 
             <form action={action} className="w-50 flex flex-column gap-y-4 justify-end">
                 <ActionButton pending={pending}>Logout</ActionButton>

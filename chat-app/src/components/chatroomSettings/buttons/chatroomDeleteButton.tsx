@@ -9,6 +9,7 @@ import { deleteChatroom } from "@/app/(main)/chat/actions";
 import Modal from "../../modal/modal";
 import { redirect } from "next/navigation";
 import { PopupContext, TPopupContext } from "@/contexts/popup";
+import Image from "next/image";
 
 const initialState: FormState = { errors: [] };
 
@@ -31,10 +32,10 @@ export default function ChatroomDeleteButton({ chatroom } : { chatroom?: Chatroo
         { state.errors.length > 0 && state.errors.map(err => <div className="text-red-500 text-sm" key={`${err}nameerror`}>{err}</div>) }
         <Modal id="RUSure modal" isOpen={isWarningOpen}>
             <div className="fixed top-0 left-0 w-screen h-screen z-40 backdrop-brightness-50 flex justify-center">
-                <div className="flex flex-col items-center text-white bg-gray-500 h-max p-10 pt-3 rounded-b-lg">
-                    <h1 className="text-orange-500 font-bold text-3xl mb-5">Are you sure?</h1>
-                    <p>{ chatroom?.name } will be permanently deleted!</p>
-                    <div className="mt-5 w-full flex justify-between px-6">
+                <div className="flex flex-col items-center text-white bg-gray-500 h-max p-10 pt-5 rounded-b-lg">
+                    <p><b className="text-orange-400">{ chatroom?.name }</b> will be <b>permanently</b> deleted!</p>
+                    <Image src="/images/graffiti/RUSure.png" className="w-80 h-60 absolute top-10 z-1" alt="are you sure pic" width={2000} height={2000}/>
+                    <div className="mt-18 mb-15 w-100 flex justify-between z-5">
                         <ActionButton onClick={() => startTransition(() => action())} pending={pending}>Yes</ActionButton>
                         <button className="bg-gray-400 hover:bg-gray-600 px-6 rounded-md" onClick={()=> setIsWarningOpen(false)}>No</button>
                     </div>

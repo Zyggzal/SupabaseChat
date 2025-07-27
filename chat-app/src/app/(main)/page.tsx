@@ -1,19 +1,21 @@
 import createClient from "@/utils/supabase/server";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
   const client = await createClient();
 
-  const { data } = await client.auth.getUser();
-  
+  const user = await client.auth.getUser();
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      {data.user ? data.user?.email : 
-        <div>
-          <Link href={'/login'}>Sign in</Link>
-          <Link href={'/register'}>Sign up</Link>
-        </div>
-      }
+    <div className="wall h-full flex justify-center items-center flex-col">
+      <Image src='/images/graffiti/chat.png' alt="chat pic" width={1000} height={800} className="w-200 h-150" priority/>
+      {
+        user.data.user ?
+          <Link href='/chat' className="bg-orange-400 rounded-xl p-5 text-white font-bold hover:bg-orange-500">Let's get chatting!</Link>
+          :
+          <Link href='/auth' className="bg-orange-400 rounded-xl p-5 text-white font-bold hover:bg-orange-500">Let's get started!</Link>
+        }
     </div>
   );
 }
